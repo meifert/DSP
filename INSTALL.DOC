@@ -1,0 +1,144 @@
+                           DSP STARTERS KIT
+                                "DSK"
+                          INSTALLATION GUIDE
+
+This file helps the user to successfully install the DSK software and hardware
+to the PC.
+
+Table of Contents:
+------------------
+      1. WHAT IS INCLUDED IN YOU DSK KIT ?
+      2. CONNECTING THE DSK TO YOUR PC
+      3. RS232 CABLES REQUIREMENTS
+      4. POWER SUPPLY REQUIREMENTS
+      5. SETTING UP THE DSK SOFTWARE
+      6. DSK SPECIFICATIONS
+
+
+
+1. WHAT IS INCLUDED IN YOUR DSK KIT ?
+--------------------------------------
+   - DSK Installation Guide
+   - C5x Users Guide
+   - Software Diskette
+   - DSK Application circuit board
+      > TMS320C26 DSP processor
+      > TLC32040 Analog Interface Circuit (AIC)
+      > RS-232 interface chips
+      > AC/DC Power supply circuitry
+    +-------------------------------------------------------------------+
+    | NOTE: THE RS232 CABLE AND WALL MOUNT TRANSFORMER ARE              |
+    |       INSTALLATION SPECIFIC AND ARE NOT INCLUDED. REFER TO        |
+    |       SECTIONS 3 and 4 FOR MORE INFORMATION.                      |
+    +-------------------------------------------------------------------+
+
+
+2. CONNECTING THE DSK TO YOUR PC
+   -----------------------------
+
+   1) First, turn off the power to your PC.
+   2) Connect an RS232 cable to either COM1 or COM2 of your PC.
+   3) If needed, connect an RS232 25 to 9 pin adapter.
+   4) Connect the DSK to the other end of the RS232 cable.
+   5) Connect the 9 VAC transformer to the DSK.
+   6) Plug the 9 VAC transformer into the wall.
+   7) Turn on the power to your PC
+   8) Install the DSK software using DSKINSTL.BAT batch bile.
+      Type C:\dskinstl ?  where ? is either a: or b:
+
+3. RS232 CABLES REQUIREMENTS
+   -------------------------
+     The DSK requires a 9 pin RS232C connection to the PC host. If your comm
+   port has a 25 pin connector, you will need a 25 to 9 pin adapter. These
+   parts can be purchased from Radio Shack. The catalog numbers are listed
+   below:
+           9 -to- 9 pin RS232 link (Cat No. 26-117)
+           25 -to- 9 pin RS232 adapter (Cat No. 26-1388)
+
+
+4. POWER SUPPLY
+   ------------
+   The DSK requires a 9 VAC (>250 mA) UL class 2 transformer.  The DSK power
+   jack accepts 2.1mm (2.5mm in older revisions) plugs which are common to many
+   wall mount AC transformers.  A low current UL listed transformer is
+   recommended for the DSK module since they are designed to withstand most
+   power faults for a brief period of time.
+
+   IF YOU HAVE PROBLEMS, IMMEDIATELY UNPLUG THE TRANSFORMER FROM THE WALL
+   and check that your connections are correct. In the United States a
+   suitable transformer (9 VAC, 1.3A) can be purchased from Radio Shack.
+   (Cat. No. 273-1611A). If you have an older version DSK which accepts the
+   2.5mm plug, the catalog number is 274-1568.
+
+
+5. SETTING UP THE DSK SOFTWARE
+   ---------------------------
+
+   BACK UP THE ORIGINAL DSK DISKETTE AND KEEP IT IN A SAFE PLACE!
+
+   On a DOS command line type the following:
+
+                       C:\> dskinstl a:    (installing from drive a:\)
+
+    This will exectute a batch file and creates a sub-directory named C:\DSK.
+    It copies all files from the original DSK diskette into the C:\DSK
+    sub-directory.
+
+    If you plan to develop code in another directory you may also want to
+    add the DSK directory to the PATH setup statement in AUTOEXEC.BAT
+
+    Edit the PATH statement in AUTOEXEC.BAT as follows....
+
+    PATH C:\DOS;C:\MOREDIRS;C:\DSK  <== APPEND ";C:\DSK" TO THE PATH SETUP
+
+
+    Reboot your computer. Type the following to execute the debugger/monitor
+    program. Make sure DSK is powered up and connected to the computer.
+
+    C:\DSK> DSK5D         <== Execute the DSK Debug/Monitor program
+
+    At this time the DSK Debugger program (DSK5D) will attempt to setup
+    communicate between your PC and DSK.  If the DSK5D is succesfull a screen
+    will appear with display boxes for the CPU registers, memory, dissasembly
+    and watch. If DSKD could not establish communications, it may display an
+    error message or continually attempt a connection.
+
+    Once DSK5D has been started, try loading the test file FUNC.DSK under the
+    \APPS directory.  This is done by hitting the "L" key for load, followed by
+    "D" for DSK in the sub-menu. Note how the top line changed to the sub-menu
+    when you hit the "L" key. Next type "FUNC.DSK" into the file to load field,
+    then hit enter. If everything worked the file should now be loaded and
+    ready to run.
+
+    With FUNC.DSK now loaded into the DSK module, try single stepping the
+    monitor by hitting the "space" bar.  As you step through the code you
+    should see the registers and memory being modified by the CPU.  To single
+    step a set number of times (without hitting "space" all the time) enter "X"
+    for eXecute, followed by "N" to enter the number of steps. You then enter a
+    value and hit enter.  To free RUN the DSK, enter "X" for execute, followed
+    by "G" for Go.  To halt the DSK hit the "ESC" key.
+
+    In the event of an error, the COM port, baud rate and ROM revision can
+    be directly specified on the command line when DSK5D is invoked.  The
+    DSK5D invocation help panel can be displayed from DOS by entering
+
+    C:\DSK> DSK5D ?      <= HINT: Many DOS applications use ? for online help
+
+
+6. SPECIFICATIONS
+   --------------
+     Power Supply:INPUT: 9 VAC, 250 mA minimum, UL Class 2 transformer
+                  OUTPUT: +/-5  VDC regulated, <50 mA
+                         +/-12 VDC unregulated, <50 mA, <4V ripple (no load)
+        Analog In: +/-3V max
+       Analog Rin: 100 Kohm typ
+       Analog Out: +/-3V typ into 600 ohm load
+            RS232: Requires TX,TR,DTR and GROUND.
+                   RS232 output is +/-5V minimum into 600 ohms
+
+   NOTE: The DC supplies are affected by external loading.  Loads in excess of
+         50 mA may create excessive ripple that may cause the 5VDC regulators
+         or RS232 driver to not operate properly.  If you plan to expand the
+         DSK with external memory, I/O devices etc... you will likely need
+         to use an external supply.
+

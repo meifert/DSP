@@ -1,0 +1,74 @@
+            ***  WELCOME TO THE C5X DSP STARTER'S KIT (DSK)  ***
+
+
+This file lists the software included in the DSK kit and where to find
+additional applications to run on the DSK.
+
+Three executables are included in this kit to allow the user to completely
+develop applications using the DSK. For more information regarding the DSK
+Assembler, DSK loader, and DSK Debugger, please refer to the DSK User's Guide
+or read file 'C:\DSK\DSK.DOC. The executables and additional files are
+explained below:
+
+
+After running the DSKINSTL.BAT program, you should have the following files
+located on your C:\ drive.
+
+File             Description
+----             -----------
+C:\DSK\
+   DSK.DOC       The DSK User's Guide.
+   DSKINSTL.BAT  Batch file to install the DSK software on your C:\ drive.
+   DSK5A.EXE     DSK Assembler executable (see DSK User's Guide to operate).
+   DSK5D.EXE     DSK Debug/Monitor executable (see DSK Users Guide to operate).
+   DSK5L.EXE     DSK Loader executable
+   INSTALL.DOC   Installation and technical reference.
+   README.1ST    This file.
+   SELFTEST.ASM  Source code to DSK selftest program.
+   SELFTEST.CMD  Linker command file used to create the selftest COFF file.
+   SELFTEST.OUT  The selftest COFF file that is executed using the DSK loader.
+
+C:\DSK\APPS\
+   APPS.DOC      Description of application files and how to use them
+   DSK_SPEC.DSK  DSK Spectrum analyzer (use DSK loader)
+   DSK_SPEC.ASM  DSK Spectrum analyzer assembly source code
+   DSK_TWID.ASM  Twiddle tables source code for DSK Spectrum Analyzer
+   FUNC.ASM      Signal function generator source code
+   FUNC.DSK      Signal function generator (DSK executable)
+
+C:\DSK\ROM\
+   BOOT.CMD      DSPHEX command file used to create DSK5D.I0 file.
+   DSK5D.ASM     Communications kernal source code.
+   DSK5D.CMD     Linker command file used to create the COFF file.
+   DSK5D.I0      DSPHEX output in 'Intel' format for burning the DSK EPROM.
+   DSK5D.OBJ     Assembled communications kernal.
+   DSK5D.OUT     Assembled and linked communications kernal (COFF) file.
+   ROM.DOC       How to create communications kernal code to program an EPROM.
+
+
+WHERE TO FIND MORE APPLICATION PROGRAMS ??
+------------------------------------------
+
+   The debugger software you have received with your DSK including the
+   communications kernal, DSK Loader, and DSK assembler cannot be copied
+   and/or distributed in any form without the written approval of
+   Texas Instruments.
+
+   Texas Instruments hereby disclaims all warranties relating to this
+   software, whether express or implied, including without
+   limitation any implied warranties of merchantability or fitness
+   for a particular purpose. Texas Instruments will not be liable for any
+   special, incidental, consequential, indirect or similar damages
+   due to loss of data or any other reason, even if Texas Instruments or an
+   agent of Texas Instruments has been advised of the possibility of such
+   damages.  In no event shall Texas Instruments's liability for any damages
+   ever exceed the price paid for the license to use software,
+   regardless of the form of the claim.  The person using the
+   software bears all risk as to the quality and performance of the
+   software.
+
+   The DSK APPLICATION programs are updated and distributed free of charge
+   from the TMS320 DSP BBS: (713)-274-2323, No parity, 8 data bits, 1 stop
+   bit, 1200/2400/9600 baud. If you have comments or just looking for new
+   applications, please feel free to logon.
+

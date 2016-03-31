@@ -1,0 +1,941 @@
+           *********************************************************
+           *                  >>>>>>> NOTE <<<<<<<                 *
+           *                                                       *
+           *             THIS IS A PRELIMINARY DOCUMENT            *
+           *     THE DSP STARTERS KIT IS NOT YET PRODUCTIZED       *
+           *                                                       *
+           *********************************************************
+
+                               C5X DSP STARTERS KIT
+
+                                  ( D S K 5 )
+
+                       USERS GUIDE AND TECHNICAL REFERENCE
+
+
+DSK HARDWARE AND SOFTWARE LICENSE
+---------------------------------
+
+Hardware
+
+     Your unmodified DSK circuit board has been carefully tested and
+     inspected in the factory for functionality.  Be sure to check the
+     board yourself BEFORE making any changes!  If you do make changes, this
+     will invalidate any kind of warranty, and we will not accept the board
+     back for repair.
+
+Software
+
+     DSK5D.EXE (tm) TMS320C50 RS232 Monitor and Debugger   Version 1.xx
+     Copyright 1993 Texas Instruments, Inc.  All rights reserved.
+
+     DSK5A.EXE (tm) TMS320C5x DSP Designers Kit Assembler Version 1.xx
+     Copyright 1993 Texas Instruments, Inc.  All rights reserved.
+
+     DSK5L.EXE (tm) TMS320C5x DSP Designers Kit Loader Version 1.xx
+     Copyright 1993 Texas Instruments, Inc.  All rights reserved.
+
+
+Introduction to C50 DSP Designers Kit
+---------------------------------
+
+OVERVIEW
+
+  Your C50 DSK development kit is designed to be operated from an IBM PC/AT
+or compatible.  The user interface is through an RS-232 serial communications
+link.  Provisions have been made in the hardware specification making it
+possible to upgrade the DSK module with extra memory and features of your
+own design.
+
+KIT CONTENTS: Your kit should contain the following materials.
+
+   - DSK circuit board module
+      > TMS320C50 DSP processor
+      > TLC32040 Analog Interface Circuit (AIC)
+      > RS-232 interface chips
+      > AC/DC Power supply circuitry
+
+   - Floppy disk containing
+      > DSK5D.EXE    - The debugger interface for the DSK module
+      > DSK5A.EXE    - A TMS320C5x assembler
+      > DSK5L.EXE    - A DSK loader program
+      > ?????        - Check the subdirectories!  New applications will be
+                       added as they become available!
+
+   - DSK Users Guide and Technical Reference
+
+=======================================================================
+
+WHAT YOU WILL NEED TO PROVIDE
+-----------------------------
+
+  Like C26 DSK, your C50 DSK circuit board and software has been designed
+  to be operated from an IBM PC/AT running DOS 4.01 or higher. Your
+  computer must have an RS-232 asynchronous port installed to run the DSK.
+  Also, a suitable 9VAC (UL Class II) wall mount transformer with a 2.1mm
+  pin diameter power jack.  The outer diameter is 5.50mm.  A chart showing
+  the DSK connector and corresponding plugs is given below.
+
+              +----------+--------+--------+
+              |          | DSK    | XFMR   |
+              |          | CONN   | PLUG   |
+              +----------+--------+--------+
+              | PIN   ID | 2.00mm | 2.10mm |
+              | SHAFT OD | 5.55mm | 5.50mm |
+              +----------+--------+--------+
+
+RS232 PORT AND CABLES
+---------------------
+
+  To run the DSK you will need to have an RS-232 port available.  If you
+do not, or the one you have is currently being used (possibly a mouse), you
+may need to purchase an Asynchronous communications for your PC or possibly
+an RS-232 upgrade kit.  Consult your PC manual for more details.
+
+  You will also need to purchase an RS-232 cable to connect to the DSK module.
+To save space the DSK was designed with a DB9 RS-232 connection.  This
+connector style is very popular with newer PC's and laptop computers.  If
+you do not have the neccessary cables, they can be purchased from a local
+computer store.  If you are making your own cable, the DSK module connections
+as shown below.
+                                    DSK CIRCUIT BOARD
+                         ..........................................
+                         :         RS232 LINE    C50 DSP          :
+      -----+             :    / |    BUFFERS     +----+           :
+           |TX   (XMIT)  :3 /   |  |\            |    |           :
+      PC/AT|---------------|    |--|  >o---------|BIO |  +-----+  :
+      HOST |TR   (RCV)   :2|   R|  |/  /|        |    |--|     |--- AIN
+           |---------------| D S|---o<  |--------|XF  |--| TLC |  :
+      ASYNC|DTR  (/RS)   :4| B 2|  |\  \| |\     |    |--|32040|  :
+      SER  |---------------| 9 3|--|  >o--|  >o--|/RS |--| AIC |--- AOUT
+      PORT |GND          :5|   2|  |/     |/     |    |--|     |  :
+           |---------------|    |----------------|GND |  +-----+  :
+           |             :  \   |                |    |           :
+      -----+             :    \ |                +----+           :
+                         :                       +-----------+    :
+                         :       +12(unreg) -----| Half Wave |    :
+                         :               +5 -----| rectify   |----- 9 VAC
+                         :               -5 -----| +/-5V reg |    :
+                         :       -12(unreg) -----|           |    :
+                         :                       +-----------+    :
+                         ..........................................
+
+
+POWER SUPPLY
+------------
+  The C50 DSK uses the same power supply design as the C26 DSK. You will need
+a 9 VAC (>250 mA) supply to run the DSK.  The DSK module accepts a 2.1mm power
+jack, common to many wall mount AC transformers.  A low current UL listed
+transformer is recommended for the DSK module since they are designed to
+withstand most power faults for a brief period of time.  If you do have
+problems, immediately unplug the transformer from the wall and check that you
+have everything set up right. In the United States a suitable transformer (9
+VAC, 1.3A) can be aquired from Radio Shack (Cat. No. 273-1611A).  However, if
+you have a early revision board you will also want to replace the 2.1mm jack on
+this transformer.
+
+  If you decide to use the DSK's on board power supply and regulators for
+external circuits, be sure to keep the loading to less than about 50 mA.
+Regulation for the DSK is minimal and can not handle a lot of additional
+current.
+
+  The DSK module can also be run from a suitable +/-7 to +/-12 VDC supply.
+In this case the minimum voltage is set by the lower regulation limit of
+the onboard +/-5 V regulators and the upper limit by the maximum allowable
+RS232 level.  To do this, power is directly applied to the double row header
+where all signals have been made available.  Note: Be careful to connect
+the power supply correctly since the DSK is not warrentied after modifications
+have been made.  Failure to do this can also cause significant damage to
+the DSK module.
+
+SETTING UP THE DSK SOFTWARE
+---------------------------
+
+  It is strongly recommended that you first copy the contents of the DSK
+distribution disk to a safe place for backup.  This can be done by using the
+DOS DISKCOPY utility.  It is not recommended that you use the DSK from the
+distribution diskette.
+
+  Next, we need to execute the install batch file (DSKINSTL.BAT) to install the
+software to the C:\DSK sub-directory.  Since the DSK5D debugger is also
+compatible with TI's COFF assemblers and linkers you can also copy everything
+to that directory to keep things simple.  Next you should modify your PC's path
+statement to make the DSK tools available from other directories.
+
+  The DSK software you will need primarily consists of three executable files,
+DSK5D.EXE, DSK5A.EXE, and DSK5L.EXE.  The first two files are the debugger and
+assembler respectively.  The third one is loader program. The other files
+contained in the distribution disk are for examples and development support.
+
+  When the DSK5D is first started it also creates some configuration and
+parameter file (DSK5D.CFG and DSK5D.PRM).  They can be modified to customize
+the colors that the debugger uses.  If something goes wrong, delete the
+old ones and start over.
+=============================================================================
+
+DSK5D
+-----
+INTRODUCTION
+
+  DSK5D is a debugger and user interface designed to be used with the EPROM
+Bootload option of the TMS320C50 chip.  Features of DSK5D include an easy to
+use windowed display of program, data, internal registers and status.  The
+user interface is capable of loading and executing user code with single
+step, breakpoint and run-time halt capabilities.  The full featured DSP code
+which is responsible for the host communications has been kept to a very
+compact 314 words in program SARAM making it possible to run reasonably
+complicated code completely on-chip while still operating the debugger.
+
+INPUT FILES FOR DSK5D
+
+  Valid code formats for DSK5D include both DSK output files from the DSK5A
+assembler and COFF format files from the TMS320 DSP Fixed Point Assembler.
+If you need features not found in the DSK5A assembler, contact your local
+TI sales representitive for purchasing information on the COFF assembler.
+
+HOW DSK5D WORKS
+
+  DSK5D works in conjunction with the EPROM bootload option of the
+TMS320C50.  When the 'C50 is reset, the on-chip ROM bootloader drives the BR\
+pin low and starts to load the kernel program from the OTP on the DSK. After
+loading, the program starts from 0x800 on SARAM which is configured as program
+and data memory.
+
+  The DSK uses BIO and XF to communicate with RS232. When the BIO line goes
+low, this indicates that an RS232 transmission start bit has been sent by the
+host.  Since the baud rate is unknown, the PC sends 0x80 data through RS232
+and the 'C50 begins counting the number of elapsed CPU cycles until the BIO
+line goes high again.  The baud rate is set by the width of the start bit plus
+7 data bit, then divide by 8.
+
+  The bootloader loads code into on-chip SARAM.  In the case of the DSK a
+debugging and communications kernal is loaded which is capable of bi-
+directional RS232 communications using XF and BIO as well as debugging using
+the TRAP mneumonic and INT2 (incoming RS232 message).  When a debug interrupt
+occurs, the DSK kernal also saves and restores the internal registers.  This
+should not concern a DSK user as long as the kernal is not corrupted.  If it is
+corrupted, the DSK5D (and the DSP) will not operate properly.
+
+                        >>>>>>  IMPORTANT <<<<<<
+
+   Your DSK module uses the INT2 line tied to the BIO input to indicate that
+there is activity on the RS232 receive line.  If you turn off the global
+interrupt enable bit or unmask INT2 the runtime halt feature will not work.
+Likewise, if you rewrite the vector table for either TRAP or INT2 the debugger
+kernal will fail to operate correctly.
+
+                         RESERVED FOR DSK5D
+
+   > All of RAM block B2                 CPU register storage
+   > First 384 words of SARAM            debugger communications kernal
+   > SARAM configured as
+     program & data RAM                            ""
+   > C50 must be in uC mode              RS232 receive is in ROM
+   > RESET
+   > INT2                                Halts running CPU
+   > TRAP opcode                         Breakpoints and single step
+
+INTERRUPT VECTOR TABLE
+
+  The interrupt vectors of the DSK have been allocated to start at 0x800. That
+means the IPTR value in the PMST register is 1, and You SHOULD NOT MODIFY THE
+IPTR VALUE. The DSK5D program will restore the RESET, INT2, TRAP interrupt
+vectors. Therefore, you should not worry about overwriting those vectors. The
+kernel program starts from 0x840 -DO NOT LET YOUR INTERRUPT VECTORS OVERWRITE
+THE KERNEL PROGRAM. Your program should start after 0x980. We recommend you
+start from 0xa00. The example code below shows where the DSK interrupt vector
+table and kernal reside.
+
+        .ps     0800h
+RESET:  .space  2*16          ;00; Reset vector reserved for Kernel program
+INT1:   B       ISR1          ;02; external INT1
+INT2:   .space  2*16          ;04; INT2 reserved for Kernal program
+INT3:   B       ISR3          ;06; external INT3
+TINT:   B       TIMER         ;08; Timer interrupt
+RINT:   B       RECEIVE       ;0A; Serial port receive interrupt
+XINT:   B       TRANX         ;0C; Serial port transmit interrupt
+TRNT:   B       TREC          ;0E; TDM serial port receive interrupt
+TXNT:   B       TTRANX        ;10; TDM serial port transmit interrupt
+INT4:   B       ISR4          ;12; external INT4
+
+        ;--------------------------------------------------------------
+        ; KERNEL PROGRAM (00840h - 00980h)
+        ;--------------------------------------------------------------
+
+         .ps    00a00h        ;Your code can start here
+         .entry               ;
+START:   mar    *,AR0         ;
+         lar    AR0,#0        ;
+         lacl   #03fh         ;Turn on all interrupts
+         ldp    #0            ;
+         sacl   04h           ;
+SELF:    B      SELF          ;
+        ;---------------------------------------------------------------
+        ; Simple interrupt processing (quick return)
+ISR1:                         ;
+ISR3:                         ;
+ISR4:                         ;
+TIMER:                        ;
+RECEIVE:                      ;
+TRANX:  ldp    #0             ;recover the ARP from ST1
+         .
+         .
+         .
+        rete                  ;
+        .end                  ;
+
+
+DSK5D COMMANDS AND HELP MENU
+
+  For quick reference, a list of commands can be viewed from within DSK5D by
+hitting 'H' (Help) while at the command line.  This list can also be sent to
+a file while in the Help menu by hitting the 'F' (File) key. The following is
+the output listing:
+
+
+     D S P    S T A R T E R     K I T    D E B U G G E R
+컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴
+
+Usage of the program: dskd [[-|\][options]
+Options: Please note that options are not case sensative
+컴컴컴컴
+H      : Displays this screen
+Bxxxxx : Selects the baudrates: 4800, 9600, 19200[default], 38400, or 57600.
+COMx   : comport: x=1 [default] or x=2. Optional 'C1' or 'C2' can be used to
+         select commport 1 and commport 2 respectively. (commports 3 & 4 are
+         not supported)
+Exxxx  : defines the entry point, where xxxx is the address in hexidecimal.
+I      : selects logic level for DTR->Reset (default->inverse)
+L      : selects the EGA/VGA screen length (43 or 50)
+S      : selects the default screen length (25)
+ 
+Function Key definitions
+袴袴袴袴袴袴袴袴袴袴袴袴
+F1     Help Information
+F2     Print Screen to 'screen.srn'
+F3     Display Directory
+F4     unused
+F5     execute to breakpoint --> same as XG
+F6     unused
+F7     unused
+F8     singlestep --> same as F10, XS, blank, return
+F9     unused
+F10    execute over function --> same XF
+F11    Reverse Assembler window
+sF1    Reverse Assembler window
+F12    Trace ON/OFF
+sF2    Trace ON/OFF
+ 
+ 
+BA     Breakpoint add
+BD     Breakpoint delete
+BE     Breakpoint enable/disable
+BL     Breakpoint list
+ 
+C..    Copy/Move
+CDD    Copy Data block to another Data area
+CDP    Copy Data block to Program area
+CPD    Copy Program block to Data area
+CPP    Copy Program block to another Program area
+ 
+DD     Display Data memory
+DB     Display Breakpoints
+ 
+DF.    Display Format: see subcommands
+DFB    Display Data in format big (expo=16,mantissa=32/Q30)
+DFD    Display Data in format double
+DFE    Display Data in format short float (exp=16,mant=16/Q14)
+DFF    Display Data in format float
+DFI    Display Data in format integer
+DFL    Display Data in format long
+DFO    Display Data in format octal
+DFP    Display Data in format packed string
+DFQ    Display Data in format signed Q15
+DFS    Display Data in format string
+DFU    Display Data in format unsigned integer
+DFT    Display Data in format long float (exp=32,mant=64/Q62)
+DFX    Display Data in format hexadecimal
+ 
+DM.    Display Memory window: see subcommands
+DMA    Display Memory window: set Address
+DMB    Display Memory Format: big (expo=16,mantissa=32/Q30)
+DMD    Display Memory Format: double (IEEE)
+DME    Display Memory Format: short float (exp=16,mant=16/Q14)
+DMF    Display Memory Format: float (IEEE)
+DMI    Display Memory Format: integer
+DML    Display Memory Format: long
+DMO    Display Memory Format: octal
+DMQ    Display Memory Format: Q15
+DMU    Display Memory Format: unsigned int
+DMT    Display Memory Format: long float (exp=32,mant=64/Q62)
+DMX    Display Memory Format: to hexadecimal
+ 
+DP     Display Program memory
+DS     Display Status register information
+DV     Display Version
+ 
+FD     Fill Data Memory with a value
+FP     Fill Program Memory with a value
+ 
+Help   Help display
+ 
+I      Initialize to the entry point of the program
+ 
+L..    Load data (program, [formatted] data from a file)
+LC     Load Coff file: common object file format
+LD     Load DSK file: DSK file format
+LP     Load Format Program: 4 hex digits per line
+LF.    Load Format
+LFB    Load Format Bfloat: 1 big float per line
+LFD    Load Format Double: 1 IEEE double number per line
+LFE    Load Format Efloat: 1 special float per line
+LFI    Load Format integer: 1 int per line
+LFL    Load Format long: 8 hex digits per line
+LFF    Load Format Float: 1 IEEE float number per line
+LFP    Load Format packed charter string
+LFQ    Load Format Q15: one Q15 number per line
+LFS    Load Format Char string: 1 char per word
+LFT    Load Format Tfloat: 1 long float per line
+LFU    Load Format unsigned: 1 unsigned int per line
+LFX    Load Format Hex: 4 hex digits per line
+ 
+MR     Modify 320C50 Register: PC,ACCU,ARx, etc.
+MP     Modify Program Memory
+MD     Modify Data Memory
+ 
+Q      Quit (or ctrl Q)
+ 
+P      load Program counter: done from ModifyRegister display
+ 
+R      Reset the 320c50
+ 
+S..    Save (program, [formatted] data to a file)
+SD     Save Data memory to file
+SF     Save Format
+SP     Save Program memory to file: 4 hex digits per line
+SFB    Save Format Bfloat: 1 big float per line
+SFI    Save Format integer: 1 int per line
+SFD    Save Format Double: 1 IEEE double number per line
+SFE    Save Format Efloat: 1 special float per line
+SFF    Save Format Float: 1 IEEE float number per line
+SFL    Save Format long: 8 hex digits per line
+SFP    Save Format Packed character string
+SFQ    Save Format Q15: 1 Q15 number per line
+SFS    Save Format character String: 1 char per word
+SFT    Save Format Tfloat: 1 long float per line
+SFU    Save Format unsigned: 1 unsigned int per line
+SFX    Save Format Hex: 4 hex digits per line
+ 
+V      Verify Flag ON/OFF - default=ON for(Load ...)
+ 
+W..    Watch Window definition
+WA     Watch window: Address definition
+WD     Watch window: Delete watch number
+WM     Watch window: Modify address of watch
+WF     Watch window Format: see subcommands
+WFB    Watch window Format: big (exp=16,mant=32/Q30)
+WFD    Watch window Format: double
+WFE    Watch window Format: short float (exp=16,mant=16/Q14)
+WFF    Watch window Format: float
+WFI    Watch window Format: integer
+WFP    Watch window Format: packed string
+WFQ    Watch window Format: Q15 (sign . fraction)
+WFS    Watch window Format: string
+WFU    Watch window Format: unsigned integer
+WFT    Watch window Format: long (exp=32,mant=64/Q62)
+ 
+XA     eXecute and go to Address: define a destination Adress
+XC     eXecute with calling a function (includes stack handling)
+XF     eXecute a function: CALL or CALA 
+XG     eXecute Go to Breakpoint
+XL     eXecute and Link: branches like a 'call' to an address
+XQ     eXecute and Quit the debugger
+XN     eXecute 'n' single steps
+XR     eXecute and Free Run (ignore switching XF)
+XS     eXecute one single step
+       see: F8, F10, blank, return
+ 
+ 
+Floating Point formats:
+컴컴컴컴컴컴컴컴컴컴컴�
+.Float   32 bit IEEE standardized floating point format
+.Double  64 bit IEEE standardized double floating point format
+.Bfloat  'big float' / 16 bit exponent + 32 bit mantissa
+         exponent: 2's complement / signed mantissa = Q30
+.Tfloat  'long float' / 32 bit exponent + 64 bit mantissa
+         exponent: 2's complement / signed mantissa = Q62
+.Efloat  'enhanced float' / 16 bit exponent + 16 bit mantissa
+         exponent: 2's complement / signed mantissa = Q14
+ 
+ 
+Register Definitions:
+컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴�
+PC    Program counter: 16 bit
+ACCU  Accumulator: 32 bit with C (carry) in ST1
+ACCB  Accumulator Buffer: 32 bit to temporarily store ACCU
+PREG  Product Register: 32 bit for 16* 16 bit multiplication
+TRG0  Temporary Multiplicand: 16 bit for multipliction
+      and special instructions
+TRG1  Temporary Register 1: 5 bit for dynamic shift
+TRG2  Temporary Register 2: 4 bit for bit pointer in bit test
+ARi   Auxiliary Register: 16 bit with i=0..7 used as
+      counter and pointer
+ST0   Status Register 0: 16 bit
+ST1   Status Register 1: 16 bit
+PMST  Status Register: 16 bit
+STCKi Stack Register: 16 bit with n= 0..7 used as
+      Hardware Stack.
+      Please note that the debugger uses one level stack
+      for its own purpose!!
+DRR   Data receive register at address 0:
+          16 bit for the serial port
+DXR   Data transmit register at address 1:
+          16 bit for the serial port
+TIM   Timer register at address 24: 16 bit
+PRD   Period register at address 25: 16 bit
+IMSK  Interrupt mask register at address 4:
+          6 bits for masking 6 interrupts
+GREG  Global register at address 5:
+          8 bits to define data memory as global
+SPC   Serial Port Control Register at address 22
+ARP   ST0: Auxiliary register pointer: 3 bits
+INTM  ST0: Interrupt mode (global int enable) : 1 bit
+DP    ST0: Data Page pointer: 9 bits
+ARB   ST1: Auxiliary register pointer buffer: 3 bits
+CNF   ST1: internal Prog/Data configuration: 2 bits
+PM    ST1: Preg to accu shift mode: 2 bits
+C     ST1: Carry bit: 1 bit
+TC    ST1: Test/Control: 1 bit
+HM    ST1: Holdmode selection: 1 bit
+TXM   SPC: FSX mode bit: 1 bit
+FO    SPC: serial port control (8/16 bit mode): 1 bit
+ 
+ 
+ 
+Please note that following is reserved
+컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴
+1) IMR=4 (INT2) and EINT are set from the debugger to enable
+   halting of a running program: Please do not overwrite
+   the bit IMR=4 and use logical instruction to set the
+   appropriate interrupt mask! Do not change the locations
+   0x804 and 0x805, which are reserved for INT2!
+ 
+   If another IMR bit than 4 is set this Interrupt is
+   executed also during Single Steps!
+ 
+   If an breakpoint is set on an interrupt vector (0x802...)
+   and then it is executed with Single Step it will 'nest'
+   interrupts because EINT is automatically executed!
+ 
+2) Block B2 (data memory 0x60 - 0x7f) is reserved for
+   debugger use! Don't overwrite this locations!
+ 
+3) The debugger kernel is located from 0x840-0x980
+   in SARAM configured as Program & Data memory! Please
+   DO NOT modify RAM & OVLY bits.
+ 
+4) The instruction TRAP and the memory location 0x822
+   (trap vector) are reserved for the debugger
+ 
+ 
+ 
+Please note also following
+컴컴컴컴컴컴컴컴컴컴컴컴� 
+The debugger allocate the Interrupt Vectors at 0x800 and
+higher by set IPTR=1! Please DO NOT modified the IPTR value
+Executing User Interrupts (please note that INT2 is reserved)
+requires that additional Vectors have to be placed into the
+address space 0x800-0x83f as following:
+ 
+0x802-0x803   -  INT 1
+0x804-0x805   -  INT 2 - used from debugger
+0x806-0x807   -  INT 3
+0x808-0x809   -  Timer
+0x80a-0x80b   -  Serial Port Receive
+0x80c-0x80d   -  Serial Port Transmit
+0x80e-0x80f   -  TDM Serial Port Receive
+0x810-0x811   -  TDM Serial Port Transmit
+0x812-0x813   -  INT4
+0x814-0x820   -  reserved
+0x822-0x823   -  TRAP  - used from debugger
+0x824-0x825   -  NMI
+0x826-0x827   -  reserved
+0x828-0x83f   -  User-defined
+ 
+Please note also that the ARP (auxiliary register pointer) is
+set to AR5 with executing the Interrupt vector branch! The
+original ARP content is saved to the 3 MSBs in ST1 and can
+here extracted and restored!
+ 
+============================================================================
+
+DSP DESIGNERS KIT ASSEMBLER
+---------------------------
+
+  The DSP Designers Kit Assembler (DSK5A.EXE) is a very simple and easy
+to use assembler for the TMS320C5x family of processors.  Only the most
+essential features of an assembler have been incorporated to help keep
+the assembler as easy to use as possible.  Every effort has been made to
+keep the DSK5A as compatible as possible to TI's commercialy retailed "TMS320
+Fixed Point DSP Assembly Language Tools" which offer many more features.
+
+OVERVIEW
+--------
+
+  The DSK5A assembler differs from many other assemblers in that it does not
+go through a linker phase to create an output file.  Instead the DSK5A uses
+special directives to assemble code to an absolute address 'on the fly'. A
+label table will generate at the end of list file which can give you the
+absolute address of all labels. The strength of this approach is that small
+and simple programs can be created quickly and easily.  Larger executables can
+also be created by chaining files together with the '.include' directive.
+There is no provision for linking executables or libraries together at a later
+time.
+
+COMMAND LINE OPTIONS FOR INVOKING DSK5A
+--------------------------------------
+
+Useage: DSK5A <FILE[.ASM]> [KL] [asm "code"]
+                            ||   |
+                            ||   pre-assembles 'code' as an include
+                            |+- generate list file FILE.LST
+                            +--- Keep output. Ignoring ERRORS
+
+FILES OPENED:  FILE.DSK: DSK5A Output file for use with DSK5D
+               FILE.TMP: Temporary object (automaticly deleted)
+               FILE.INC: File used when using the asm option
+
+Example: To Assemble TEST.ASM to TEST.DSK and generate a listing file TEST.LST
+
+         C:\DSK> DSK5A TEST.ASM -L
+
+option: -K  If this option is given DSK5A will try to generate an output
+            file irregardless of the outcome of any errors or warnings.
+            By default an ERROR corrupted file is deleted.
+
+        -L  This option generates an intermediate file containing the
+            unresolved opcodes.  Unresolved symbols are resolved when
+            the entire file has been read in.  Note that the symbols
+            are not stored in the intermediate object file and are
+            therefore not linkable.
+
+       asm  This option is a feature which allows the user to define
+            assembler statements from the command line.  Assembler code
+            in this case is terminated at both ends with a double quote.
+            The character immediately following the first quote is placed
+            in the first column.  ASM statements are written to an
+            include file FILE.INC overwriting the previous file using
+            that name.
+
+            Example:
+
+              DSK5A TEST.ASM  L  ASM"FFT .SET 256"  ASM" .entry 0a00h"
+
+            generates the file "TEST.INC" which contains
+
+              column 1
+              |
+              FFT .SET 256
+               .entry 0a00h
+
+DSK5A SOURCE FILES:
+-----------------
+Editors:
+
+  DSK5A assembler source files can be created with almost any ASCII editor.
+  Legal characters are any alpha-numeric character, white space and tabs.
+  What the DSK5A can not work with are files created directly from word
+  processors that use special control characters for formatting.  Usually
+  these editors can generate pure ASCII text files but not by default!
+
+Comments:
+
+  There are two ways to comment a line with the DSK5A assembler.  The first
+  and prefferable way is to use a semi-colon ";".  A semi-colon can be
+  placed anywhere in a line and everything after it is ignored.
+
+  The second way to add a comment is to use an asterisk "*".  In this case
+  the asterisk must always be in the first column.  If it is not, it will
+  be assumed to be part of an opcode and will likely generate an error.
+
+Labels
+
+  All labels must begin in the first column and must start with a letter
+  or an underscore "_".  After the first letter you can then mix in numbers
+  as you go along.  An optional colon ":" which is usually needed in other
+  assemblers as a terminator is not needed.  A label can be up to 8 characters
+  in length.
+
+  When an opcode or directive references a label, the value of the address
+  where the label is located in memory is substituted.  The only exception
+  is the LDP opcode which loads the top nine bits of the address.
+
+Opcodes
+
+  Opcodes must begin past the first column or after a white space or tab
+  character following a label.  The syntax usage of specific TMS320C5x
+  opcodes can be found in the TMS320C5x Users Guide.  The rules that apply
+  are given in the examples below.
+
+  First, it is usually neccessary to resolve ALL fields in an opcode.  If
+  an opcode field such as the shift field in a SACL opcode is left out,
+  the next field found becomes the value for that field and the next field
+  is not filled in.  If a field is not specified, its value is assumed
+  to be a null and the opcode is processed accordingly.
+
+  Second, expression analysis is NOT performed!  Things like the addition
+  of two values, multiplies, shifts etc... are not perfomed.  Only direct
+  substitution of defined variables is allowed.
+
+  EXAMPLE
+         .ps
+         LAR   AR7,RESULT
+         MAR   *,AR7
+  WRONG: SACL  *,AR7      ; becomes SACL  *,7  (AR7 used for shift)
+  RIGHT: SACL  *,0,AR7    ; all field specified
+  OK:    SACL  *          ; last two fields not specified.  This works
+         .ds
+  RESULT .word 0
+
+  This happens because the numeric value of AR7 becomes 7, which when
+  placed into the B opcode (in the wrong field) becomes *BR0+ in the
+  AR modification field.
+
+  NOTE: IMPROPERLY SPECIFIED OPCODES DO NOT ALWAYS GENERATE WARNINGS !
+
+==========================================================================
+DIRECTIVES
+==========================================================================
+label  .byte  value1,[value2,]...
+
+  The .byte directive places one or more bytes into consecutive memory words.
+  The 8 MSB's are filled with 0's.  Value can either be numeric or character
+  constants.  Variable substitution is NOT supported.
+
+LAB1   .byte    -1,2,0Ah,'A'  ;where 'A' is converted to it's ASCII char
+==========================================================================
+label  .int   value1,[value2,]...
+label  .word  value1,[value2,]...
+
+  The .int and .word directives place one or more signed 16 bit values into
+  memory.  Character constants are also legal.  Variable substitution is NOT
+  supported.
+
+LAB1   .int     0,-1,2,0ABCDh,'B'
+==========================================================================
+label  .long  value1,[value2,]...
+
+  The .long directive places one or more signed 32 bit values or character
+  constants into memory.  The least significant word is stored first.
+
+LAB1   .long    0,-123456,234567,01234ABCDh,'C'
+==========================================================================
+label  .float   value1,[value2,]...
+label  .double  value1,[value2,]...
+label  .efloat  value1,[value2,]...
+label  .bfloat  value1,[value2,]...
+label  .tfloat  value1,[value2,]...
+
+   These directives convert numeric values into various floating point
+formats.  The formats are ...
+
+.float    IEEE-784 32 bit floating point format
+.double   IEEE     64 bit floating point format
+
+.efloat   This format uses a 16 bit 2's compliment exponent and a 16 bit
+          2's compliment mantissa.  The mantissa's decimal point is between
+          bits 14 and 15 making the 1's place explicit.  That is it is not
+          implied as in IEEE formats where it is normaly suppressed.  In
+          IEEE this is suppressed to allow for greater precision since the
+          mantissa is always between 1.0 and 1.9999 in value.  For DSP use
+          an IEEE number would need to be 'unpacked' before the individual
+          members are operated on.  As a result speed performance would be
+          sacrificed.  In the .efloat, .bfloat and .tfloat formats numbers
+          are left in their unpacked form for greater efficiency.
+
+.bfloat   similar to .efloat except that it has 16 bit exponent and 32 bit
+          mantissa.
+
+.tfloat   similar to .efloat except that it has 32 bit exponent and 64 bit
+          mantissa.  NOTE: This is a proposed format for the TMS320C40 and
+          is only included for compatability.  It is not suitable for a 16
+          bit processor!
+==========================================================================
+       .mmregs
+
+  The .mmregs will generate the symbolic names for the C50 registers and
+  places them in the symbol table. It is equivalent to executing
+      IMR   .set   4
+      GREG  .set   5
+==========================================================================
+label  .string value1,[value2,]...
+
+  The .string directive places bytes into memory in a packed form in the
+  order they are encountered.  If a word is not completely filled, the
+  trailing LSB's are filled with 0's.  Value can either be numeric, character
+  constant or character string.  Variable substitution is NOT supported.
+
+LAB1   .string  -1,2,0Ah,"ABC",'D'  ;"ABC" is converted to 3 ASCII char's
+==========================================================================
+label  .space  value
+
+  The .space directive is used to insert value bits into the current
+  segment, either program or data.  Each word in the space is filled
+  with 0's and words not completely filled are padded with additional
+  zeros.
+
+Example:
+        b        past      ;
+        .space   040h      ;fills in 4 words with 0's
+past:   nop                ;
+==========================================================================
+var   .set    value
+
+  The .set directive is used to assign a value to a variable.  This
+  directive is useful in establishing values throughout the scope of
+  the assembled code.  For instance, .set could be used to set the
+  load and program entry addresses or establish values for commonly used
+  variables like memory mapped registers.
+
+Example:
+
+     [add in the feature]
+
+==========================================================================
+       .include   "file.ext"
+       .copy      "file.ext"
+
+  These directives are used to chain files together making it easier to
+  build large programs.  Note that because there is no link phase to
+  the DSK assembler that multiple definitions of labels and variables
+  will generate errors and warnings.  Nesting of included files of
+  up to 8 levels is allowed before terminating the assembler.
+
+Example:
+
+        .include        "MMRS.ASM"    ; include a file defining the MMR's
+        .include        "LINK.ASM"    ; include a file defining the load
+                                      ; and program entry address
+        .include        "VECTS.ASM"   ; include a vector table
+
+        ; BEGIN YOUR CODE HERE
+
+==========================================================================
+label   .text
+label   .data
+
+  These directives select that assembly output either goes to the program
+  or data space respectively.  The previously used address (program or data
+  space) is kept in memory making it easy to continue code or data after a
+  break.
+
+Example
+
+      [ add in the feature ]
+
+==========================================================================
+
+  The .end directive terminates the assembly process making any code that
+  follows irrelevent.  Note that an improperly placed .end directive inside
+  an .include file can also terminate the assembler prematurely.
+
+==========================================================================
+        .ps     [value]
+        .ds     [value]
+
+  These directives are used to initialize the program and data load
+  load address's.  They can appear multiple times, making it possible
+  to selectively not load anything to the gaps that are produced.
+  Also, if the addresses overlap, it is possible to overwrite code
+  or data with these directives.  If [value] is ommitted, the last
+  address is used as in .text or .data.
+==========================================================================
+        .entry  [value]
+
+  When this directive is encountered the value given becomes the starting
+  address of the program counter when the file is loaded.  If no value is
+  given the current program memory address as determined by the .ps or
+  .text section becomes the starting address.  If more than one .entry
+  directive is encountered in the file, the last .entry becomes the starting
+  address of your code.
+
+Example
+
+
+      [ add in the feature ]
+
+==========================================================================
+        .liston
+        .listoff
+
+  These directives are sometimes usefull in debugging your code.  They
+  are used to override the command line -L option which can turn on the
+  output listing.  The listing is always written to a file whose name is
+  derived from the original source with an extension of file.LST.
+
+  NOTE: .listoff also turns off disassembly since this feature is part
+        of the LIST file.
+==========================================================================
+
+        .if       value
+        .else
+        .endif
+
+  These directives are used to conditionally assemble sections of code.
+  The .if segment is assembled if value is non-zero.  Value can either
+  be numeric or a preset (.set) variable.  Note that since DSK5A does
+  not have a link phase and is a one pass assembler, variables must be
+  initialized BEFORE using them!  Otherwise their value will be zero.
+  ALso note that expression analysis is not supported.
+
+Example:
+
+        ELOOP   .set    1
+        .if     ELOOP
+SELF    B       SELF
+        .else
+        NOP
+        .endif
+==========================================================================
+        .qxx
+        .lqxx /* 32 bit Q formats */
+
+  These directives are used to generate signed 2's compliment fractional
+  integer and long integer values whose decimal point is displaced xx
+  places from the LSB.
+
+Example:
+
+       .ds      0400h
+       .Q15     0.25, 0.5, 0.75
+                             <- 15 places ->
+       0400     00000h  ; #0.000000000000000b
+       0401     02000h  ; #0.010000000000000b
+       0402     04000h  ; #0.100000000000000b
+       0403     06000h  ; #0.110000000000000b
+
+==========================================================================
+DSK OUTPUT FILES
+
+  The DSK output file supports 16 bit addresses both in program and
+data space allowing direct placement of runtime code into a target.
+
++-- DSK characters:  K designates start of file
+|                    1 designates code entry point
+|                    9 designates load address
+|
+|          +-- DSK revision and output file name
+|          |                                 +-- Checksum follows
+^ |<-------------->|                         |    +-- line terminate
+K_DSKA_1.01_TEST.DSK                         |    |
+1FB007FB00F                                  ^    ^
+9FB00B5588B55A9B55AAB55ABB55ACB55ADB55AEB55AF7AD3CF
+9FB08BFFA8BFB01B67E0B60F07C379F
+90400M0000M0000M123471234F
+:              ^
+^              |
+|              +-- B designates load to program space
+|                  M designates load to data space
+|
++-- End of file record
+

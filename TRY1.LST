@@ -1,0 +1,28 @@
+
+00001 ---- ----          .mmregs
+00002 ---- 080a          .ps     0080ah
+00003 080a 7980          B       RINT
+      080b 0000  
+00004 ---- 0a00          .ps     00a00h
+00005 ---- ----          .entry
+>>>>> ENTRY POINT SET TO 0a00
+00006 0a00 0d21          LDP     DXR
+00007 0a01 0804          LAMM    IMR
+00008 0a02 bfc0          OR      #10h
+      0a03 0010  
+00009 0a04 8804          SAMM    IMR
+00010 0a05 b80a  LOOP:   ADD     #10
+00011 0a06 9321          SACL    DXR,3
+00012 0a07 be22          IDLE
+00013 0a08 7980          B       LOOP
+      0a09 0a05  
+00014 0a0a be3a  RINT:   RETE
+00015 ---- ----  
+>>>>> FINISHED READING ALL FILES
+>>>>> ASSEMBLY COMPLETE: ERRORS:0   WARNINGS:0
+
+
+SYMBOLS
+address  name                address  name
+-------- ----                -------- ----
+00000a05 LOOP                00000a0a RINT

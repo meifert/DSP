@@ -1,0 +1,23 @@
+This file explains the procedure to convert the DSK communications kernal
+(DSK5D.ASM) source code to a EPROM programmer file.
+
+Step 1.   Use the DSPA assembler (TI fixed-point assembler version 6.40) to
+          assemble the communications kernal. (.obj file)
+           > Command: DSPA -V50 DSK5D.ASM
+
+Step 2.   Link the communications kernal object file using the TI fixed-point
+          linker version 6.40 and linker command file (DSK5D.CMD). The output
+          will be a COFF (.OUT) file.
+           > Command: DSPLNK DSP5D.CMD
+
+Step 3.   Convert the COFF file to an EPROM programmer format using the TI Hex
+          conversion Utilities version 6.40. The Hex converter uses the command
+          file called BOOT.CMD.
+           > Command: DSPHEX BOOT.CMD
+
+          To verify the conversion process was successful, the checksum
+          located in the Hex converter output (DSK5D.I0) should be '7E63'.
+          If the DSK5D.ASM file was modified in any way, the checksum will be
+          different.
+
+

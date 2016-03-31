@@ -1,0 +1,109 @@
+This file explains how to run the application code on either the DSK debugger
+(DSK5D.EXE) or the DSK Loader (DSK5L.EXE).
+
+
+
+The TMS320C5x DSK software package contains applications code for testing the
+DSK memory, setting up the AIC and testing out the host/target communications
+interface. The three application programs are listed below:
+
+   I. SELFTEST.OUT   ==> Automatic test file for the DSK board.
+  II. FUNC.DSK       ==> File allow you to check the AIC
+ III. DSK_SPEC.DSK   ==> Allow you to display the spectrum on the OSC.
+
+
+I. SELFTEST.OUT
+   ============
+   1. Connect the DSK to the RS232 properly and copy SELFTEST.OUT under
+      the working directory.
+
+   2. Run the test file by exexcuting the DSK loader with the following
+      parameters:
+         DSK5L -A -C1          (If using comport 1)
+         DSK5L -A -C2          (If using comport 2)
+
+      The parameters passed to DSK5L tell the program to automatically
+      load the file SELFTEST.OUT and execute. First DSK5L will fill the
+      DSK internal memory with a specified pattern then read them out to
+      check the DSK memory. After memory test the SELFTEST was loaded and
+      used to test the AIC. If any test failed or the test is finished DSK5L
+      will stop execution.
+
+   3. A good DSK will respond with the following messages
+
+      DSK-RS232 LOOP                  PASSED
+      Check Data Memory B0            0x0100  0x0300
+      >>>>>>>>                        PASSED
+      Check Data Memory B1            0x0300  0x0500
+      >>>>>>>>                        PASSED
+      Check Data Memory SARAM         0x0a00  0x2c00
+      >>>>>>>>                        PASSED
+      AIC test                        Send -> 0xb000  Receive -> 0x8000
+                                PASSED!
+        Your DSK already passed the test !!!
+
+   4. If any of the tests fail a  'TEST FAILED' message will be generated
+      and DSK5L will stop execution.  If the RS232 link cannot be established,
+      DSK5L will likely not load and SELFTEST will not be attempted.  If there
+      are problems, go to the section "DSK5L COMMUNICATIONS AND SUB-FEATURES"
+      in this document.
+
+
+II. FUNC.DSK
+    ========
+   1. Connect the DSK to the RS232 properly. Connect a small, low power speaker
+      to the DSK output RCA jack.
+
+   2. Run the DSK debugger program by typing the following:
+         DSK5D
+
+      If the debugger did not build the communication link, try to change the
+      comport or reduce the baud rate. Be sure the PC's baud rate is similar to
+      the baud rate of the DSK.
+
+   3. After the debugger screen appears, load the FUNC.DSK file by hitting the
+      "L" key for LOAD, followed by "D" for DSK-format file in the sub-menu.
+      Next type "FUNC.DSK" at the prompt to load the file, and hit enter. The
+      screen will show the file sections being loaded. When the file has
+      finished loading, the debugger will ask you to 'press any key to
+      continue'.
+
+   4. The default setup for FUNC.DSK is to generate random noise. Press "X"
+      (EXECUTE) followed by "G" (GO) you will hear the random noise from
+      the audio output port.  Changing the value at memory location 0xF0D,
+      will generate a sinusoid output. This is done by hitting "F" for FILL,
+      followed by "D" for DATA memory. At the FILL MEMORY sub-menu, type 0F0D
+      for address, 1 for length <hit enter> and 1 for pattern <hit enter>. Now
+      change PC to starting address(0xA00) by pressing "M" to MODIFY and then
+      "R" for REGISTER. At the prompt type 'PC=0a00' and enter. Hit enter again
+      to return back to assembly screen. You have just modified the PC register
+      contents to address 0xa00. Go ahead and run the program again (XG). This
+      time you will hear the sinewave output.
+
+  5.  Changing the sampling rate will generate a different frequency of sinwave.
+      To do this you need to change the contents on memory 0xF00 & 0xF01. These
+      two position contain the value of the TA and RA registers respecively on
+      AIC. (For more information on how the AIC determines the sampling rate
+      please refer to Appendix B of the DSK User's Guide). After modifying the
+      TA and RA registers, restart the program from the beginning in order to
+      re-initalize the AIC with the new TA and RA values.
+
+
+III. DSK_SPEC.DSK
+     ============
+   1. Connect the DSK to the RS232 properly and copy DSK_SPEC.DSK to the
+      working directory.
+
+   2. Connect an oscilloscope to the output jack and a microphone to the input
+      jack of the DSK.
+
+   3. Run the test file by typing the following
+         DSK5L DSK_SPEC.DSK -C1          (If using comport 1)
+         DSK5L DSK_SPEC.DSK -C2          (If using comport 2)
+
+      The parameters passed to DSK5L instruct it to load the file named
+      DSK_SPEC.DSK and execute.
+
+   4. Turn on the oscilloscope power. Adjust the trigger and SEC/DIV until you
+      are able to see the spectrum of the DSK input signal.
+

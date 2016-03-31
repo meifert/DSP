@@ -1,0 +1,24 @@
+VERSION: 1.02 ;  15.AUG.94   Copyright (c) 1993/4 Texas Instruments
+
+PARAFILE:    dsk5d.prm
+
+
+ENTRYPOINT:  0x0a00
+CONFMODE:    1
+INIT_ST0:    0x0e00
+INIT_ST1:    0x15fc
+INIT_PMST:   0x0030
+TRACE:       SCREEN.SCN
+SCREEN:      screen.scn
+COFFFILE:    
+DSKFILE:     func.dsk
+FORMATFILE:  
+SAFEFILE:    
+COFFPATH:    A:\
+DSKPATH:     A:\APPS
+FORMATPATH:  A:\
+SAVEPATH:    A:\
+INVERSE:     YES
+BAUDRATE:    19200
+COMPORT:     2
+SCREENLEN:   25
